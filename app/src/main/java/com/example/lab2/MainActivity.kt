@@ -9,14 +9,18 @@ import android.widget.EditText
 import android.widget.Toast
 import java.util.*
 
-class anotherClass {
+enum class Operations {
+    OneDigitNumber, TwoDigitNumber, MoreThanTwoDigitNumber
+}
+
+class AnotherClass {
     companion object {
-        fun showMessage(context: Context) {
-            Toast.makeText(context, "The sum was calculated", Toast.LENGTH_SHORT).show()
+        fun showMessage(context: Context, text: String) {
+            Toast.makeText(context, "The sum was calculated, $text", Toast.LENGTH_SHORT).show()
         }
     }
 
-    data class NumbersForSum (val x:EditText, val y:EditText){
+    data class NumbersForSum(val x: EditText, val y: EditText) {
         internal var firstNumber: EditText = x
         internal var secondNumber: EditText = y
     }
@@ -32,7 +36,7 @@ class MainActivity : AppCompatActivity() {
         var num1 = findViewById<EditText>(R.id.number1)
         var num2 = findViewById<EditText>(R.id.number2)
 
-        val numbers = anotherClass.NumbersForSum(num1,num2)
+        val numbers = AnotherClass.NumbersForSum(num1, num2)
         num1 = numbers.secondNumber
         num2 = numbers.firstNumber
 
@@ -49,16 +53,19 @@ class MainActivity : AppCompatActivity() {
 
         infix fun Int.customAdd(other: Int) = this + other
 
-        fun add(a: Int, b: Int) : Int{
+        fun add(a: Int, b: Int): Int {
             return a + b
         }
-        fun add(a: Int, b: Int, c: Int) : Int{
+
+        fun add(a: Int, b: Int, c: Int): Int {
             return a + b + c
         }
-        fun add(a: Int, b: Double) : Double{
+
+        fun add(a: Int, b: Double): Double {
             return a + b
         }
-        fun add(a: Double, b: Int) : Double{
+
+        fun add(a: Double, b: Int): Double {
             return a + b
         }
 
@@ -73,10 +80,10 @@ class MainActivity : AppCompatActivity() {
             action(val1, 0, add)
             action(val2, 1, multiply)
 
-            add(val1,0)
+            add(val1, 0)
             add(val2, 0.0)
-            add(0.0,val1)
-            add(0,0,val2)
+            add(0.0, val1)
+            add(0, 0, val2)
 
             val result = when (val1 customAdd val2) {
                 in 0..9 -> "result:" + (val1 customAdd val2)
@@ -84,8 +91,14 @@ class MainActivity : AppCompatActivity() {
                 else -> "result:" + (val1 customAdd val2)
             }
 
+            val text = when (val1 customAdd val2) {
+                in 0..9 -> Operations.OneDigitNumber.name
+                in 10..99 -> Operations.TwoDigitNumber.name
+                else -> Operations.MoreThanTwoDigitNumber.name
+            }
+
             total.setText(result)
-            anotherClass.Companion.showMessage(this);
+            AnotherClass.showMessage(this, text);
         }
 
     }
